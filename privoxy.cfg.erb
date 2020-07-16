@@ -4,3 +4,4 @@ forward-socks5 / localhost:<%= haproxy %> .
 permit-access  <%= host %><% end %>
 <% deny.to_s.split(' ').each do |host| %>
 deny-access  <%= host %><% end %>
+accept-intercepted-requests 1
