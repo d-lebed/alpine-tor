@@ -139,9 +139,10 @@ module Service
     end
 
     def restart
-      stop
+      #stop
       sleep 5
-      start
+      $logger.info "@todo new circle"
+      #start
     end
 
     def tor_port
@@ -160,12 +161,15 @@ module Service
 
     def working?
       uri = URI.parse(test_url)
+      $logger.info uri
       Net::HTTP.SOCKSProxy('127.0.0.1', port).start(uri.host, uri.port) do |http|
         http.get(uri.path).code==test_status
       end
-    rescue
-      false
     end
+    #rescue
+    #  $logger.info "Err working? "
+    #  false
+    #end
   end
 
   class Haproxy < Base
@@ -256,15 +260,27 @@ if ENV['privoxy']
   privoxy.start
 end
 
-sleep 60
+first_wait = ENV['first_wait'] || 60
+sleep first_wait
 
 loop do
   $logger.info "testing proxies"
   proxies.each do |proxy|
-    $logger.info "testing proxy #{proxy.id} (port #{proxy.port})"
-    proxy.restart unless proxy.working?
-  $logger.info "sleeping for #{tor_instances} seconds"
-  sleep Integer(tor_instances)
+
+    SOME_ONION_URI = URI.parse(test_url)
+    query = Net::HTTP::Get.new(test_url)
+    query["Host"]            = "h"
+    query["User-Agent"]      = "Mozilla/5.0 (Windows NT 6.1; rv:52.0) Gecko/20100101 Firefox/52.0"
+    query["Accept"]          = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+    query["Accept-Language"] = "en-US,en;q=0.5"
+    sleep 5
+
+    response = Net::HTTP.SOCKSProxy('127.0.0.1', 9050).start(SOME_ONION_URI.host, SOME_ONION_URI.port) do |http|
+      http.request(query)
+    end
+
+    $logger.info "sleeping for #{tor_instances} seconds"
+    sleep Integer(tor_instances)
   end
 
   $logger.info "sleeping for 60 seconds"
