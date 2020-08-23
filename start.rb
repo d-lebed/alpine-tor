@@ -264,8 +264,8 @@ first_wait = ENV['first_wait'] || 60
 sleep first_wait
 
 loop do
-  $logger.info "testing proxies looop"
-  proxies.each do |proxy|
+  #$logger.info "testing proxies looop"
+  #proxies.each do |proxy|
 
     #SOME_ONION_URI = URI.parse(test_url)
     #query = Net::HTTP::Get.new(test_url)
@@ -281,8 +281,8 @@ loop do
 
     #$logger.info "sleeping for #{tor_instances} seconds"
     #sleep Integer(tor_instances)
-    sleep 60
-  end
+    #sleep 60
+  #end
 
   $logger.info "sleeping for 60 seconds"
   sleep 60
