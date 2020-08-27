@@ -6,11 +6,11 @@ global
 
 defaults
   mode http
-  maxconn 50000
-  timeout client 3600s
-  timeout connect 1s
+  maxconn 1000
+  timeout client 36s
+  timeout connect 10s
   timeout queue 5s
-  timeout server 3600s
+  timeout server 36s
 
 
 listen stats
