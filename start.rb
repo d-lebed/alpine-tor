@@ -231,11 +231,12 @@ module Service
     def start
       super
       compile_config
-      self.class.fire_and_forget(executable, "--no-daemon", "#{@config_path}", "| logger 2>&1")
+      self.class.fire_and_forget(executable, "--no-daemon", "#{@config_path}")
 
-      self.class.fire_and_forget("socat -d tcp4-LISTEN:8448,reuseaddr,fork,keepalive,bind=0.0.0.0 SOCKS4A:127.0.0.1:hydraruzxpnew4af.onion:80,socksport=9050")
+      self.class.fire_and_forget("socat -d tcp4-LISTEN:8448,reuseaddr,fork,keepalive,bind=0.0.0.0 SOCKS4A:127.0.0.1:hydraruzxpnew4af.onion:80,socksport=5566")
       sleep 10 
-      self.class.fire_and_forget("curl -v -x 'http://@127.0.0.1:8448' -v -O https://1.1.1.1")
+      self.class.fire_and_forget("curl -v -x 'http://127.0.0.1:8448' -v -O https://1.1.1.1")
+
 
 
     end

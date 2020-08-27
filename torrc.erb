@@ -4,16 +4,4 @@ MaxCircuitDirtiness <%= max_circuit_dirtiness %>
 CircuitBuildTimeout <%= circuit_build_timeout %>
 DataDirectory <%= data_directory %>
 PidFile <%= pid_file %>
-RunAsDaemon 1
-StrictNodes 1
 ExitPolicy reject *:*
-
-ControlPort 9051
-ControlSocket /etc/tor/run/control
-ControlSocketsGroupWritable 1
-CookieAuthentication 1
-CookieAuthFile /etc/tor/run/control.authcookie
-CookieAuthFileGroupReadable 1
-
-User tor
-DataDirectory /var/lib/tor

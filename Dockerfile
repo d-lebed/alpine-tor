@@ -12,12 +12,6 @@ RUN apk --update add --virtual build-dependencies ruby-bundler ruby-dev  \
   && gem install --no-document socksify \
   && apk del build-dependencies
 
-RUN mkdir -p /etc/tor/run && \
-    chown -Rh tor. /var/lib/tor /etc/tor/run && \
-    chmod 0750 /etc/tor/run && \
-    rm -rf /tmp/*
-
-
 ADD torrc.erb       /usr/local/etc/torrc.erb
 ADD haproxy.cfg.erb /usr/local/etc/haproxy.cfg.erb
 ADD privoxy.cfg.erb /usr/local/etc/privoxy.cfg.erb
