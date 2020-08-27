@@ -5,14 +5,17 @@ RUN apk update
 RUN apk add socat tor --no-cache \
   --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
   --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-  --allow-untrusted haproxy ruby privoxy
+  --allow-untrusted haproxy ruby privoxy curl
 
 RUN apk --update add --virtual build-dependencies ruby-bundler ruby-dev  \
   && apk add ruby-nokogiri --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ \
   && gem install --no-document socksify \
   && apk del build-dependencies
 
-
+RUN mkdir -p /etc/tor/run && \
+    chown -Rh tor. /var/lib/tor /etc/tor/run && \
+    chmod 0750 /etc/tor/run && \
+    rm -rf /tmp/*
 
 
 ADD torrc.erb       /usr/local/etc/torrc.erb
@@ -22,6 +25,6 @@ ADD privoxy.cfg.erb /usr/local/etc/privoxy.cfg.erb
 ADD start.rb /usr/local/bin/start.rb
 RUN chmod +x /usr/local/bin/start.rb
 
-EXPOSE 2090 8118 5566 4444
+EXPOSE 2090 8118 5566 8448
 
 CMD syslogd && ruby /usr/local/bin/start.rb
