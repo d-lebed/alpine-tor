@@ -19,6 +19,6 @@ ADD privoxy.cfg.erb /usr/local/etc/privoxy.cfg.erb
 ADD start.rb /usr/local/bin/start.rb
 RUN chmod +x /usr/local/bin/start.rb
 
-EXPOSE 2090 8118 5566 8448
+EXPOSE 2090 8118 5566 8408-8478 
 
 CMD syslogd && ruby /usr/local/bin/start.rb

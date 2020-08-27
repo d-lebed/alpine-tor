@@ -226,6 +226,16 @@ module Service
       @haproxy = ENV['haproxy_port'] || 5566
       @permit = ENV['privoxy_permit'] || ""
       @pdeny = ENV['privoxy_deny'] || ""
+
+      @onions = {
+        "8408" => "hydramarketsnjmd",
+        "8418" => "hydraruzxpnew4af",
+        "8428" => "hydra2exghh3rnmc",
+        "8438" => "hydra3rudf3j4hww",
+        "8448" => "hydra4jpwhfx4mst",
+        "8458" => "hydra5etioavaz7p",
+        "8468" => "hydra6c2bnrd6phf"
+      }
     end
 
     def start
@@ -233,12 +243,11 @@ module Service
       compile_config
       self.class.fire_and_forget(executable, "--no-daemon", "#{@config_path}")
 
-      self.class.fire_and_forget("socat -d tcp4-LISTEN:8448,reuseaddr,fork,keepalive,bind=0.0.0.0 SOCKS4A:127.0.0.1:hydraruzxpnew4af.onion:80,socksport=5566")
-      sleep 10 
-      self.class.fire_and_forget("curl -v -x 'http://127.0.0.1:8448' -v -O https://1.1.1.1")
+      @onions.each do |k,v|
+        self.class.fire_and_forget("socat -d tcp4-LISTEN:#{k},reuseaddr,fork,keepalive,bind=0.0.0.0 SOCKS4A:127.0.0.1:#{v}.onion:80,socksport=5566")
+      end
 
-
-
+      ##self.class.fire_and_forget("curl -v -x 'http://127.0.0.1:8448' -v -O https://1.1.1.1")
     end
 
     private
@@ -272,6 +281,12 @@ first_wait = ENV['first_wait'] || 60
 sleep first_wait
 
 loop do
+  begin
+    sleep 60
+  rescue Exception => e
+    puts "E"
+  end
+
   #$logger.info "testing proxies looop"
   #proxies.each do |proxy|
 
@@ -292,6 +307,5 @@ loop do
     #sleep 60
   #end
 
-  $logger.info "sleeping for 60 seconds"
-  sleep 60
+
 end
